@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+let app = require('../app');
+let debug = require('debug')('blog-server:servers')
+
+app.listen(8083);
+app.on('listening', onListening);
+
+function onListening() {
+  var addr = app.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
