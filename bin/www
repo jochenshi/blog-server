@@ -1,15 +1,7 @@
 #!/usr/bin/env node
+let config = require('../config/config');
 
-let app = require('../app');
-let debug = require('debug')('blog-server:servers')
+let app = require('../server/app');
 
-app.listen(8083);
-app.on('listening', onListening);
-
-function onListening() {
-  var addr = app.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
+app.listen(config.port || 8089);
+console.log("app started and listening on port:", config.port);
