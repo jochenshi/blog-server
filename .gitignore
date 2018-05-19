@@ -2,6 +2,7 @@
 node_modules/
 dist/
 build/
+static/build/
 .idea/
 npm-debug.log*
 package-lock.json
