@@ -1,6 +1,5 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
 const sourcePath = path.join(__dirname, '../src/');
@@ -17,23 +16,49 @@ const config = {
 
     output: {
         path: outPath,
-        filename: "js/[name].[chunkhash].js",
-        publicPath: "/"
+        filename: "js/[name].[chunkhash].js"
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
                 loader: "babel-loader"
+            },
+            {
+                test: /\.styl$/,
+                loader: new ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: ['css-loader?-autoprefixer', 'stylus-loader']
+                })
+            },
+            {
+                test: /\.css$/,
+                loader: new ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader'
+                })
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg)(\\?.*)?$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000,
+                    name: 'img/[name].[hash:7].[ext]'
+                }
+            },
+            {
+                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000,
+                    name: 'fonts/[name].[hash:7].[ext]'
+                }
             }
         ]
     },
-
     plugins: [
-        new CleanWebpackPlugin(['build'], {
-            root: rootPath
-        }),
-        new HtmlWebpackPlugin({template: sourcePath + 'index.html'})
+        new ExtractTextPlugin('style.css')
     ]
 };
 
