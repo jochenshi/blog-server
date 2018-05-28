@@ -1,5 +1,5 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractCssPlugin = require('mini-css-extract-plugin');
 
 
 const sourcePath = path.join(__dirname, '../src/');
@@ -27,17 +27,18 @@ const config = {
             },
             {
                 test: /\.styl$/,
-                loader: new ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader?-autoprefixer', 'stylus-loader']
-                })
+                use: [
+                    ExtractCssPlugin.loader,
+                    'css-loader?-autoprefixer',
+                    'stylus-loader'
+                ],
             },
             {
                 test: /\.css$/,
-                loader: new ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: 'css-loader'
-                })
+                use: [
+                    ExtractCssPlugin.loader,
+                    "css-loader"
+                ]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\\?.*)?$/,
@@ -58,7 +59,7 @@ const config = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin('style.css')
+        new ExtractCssPlugin('style.css')
     ]
 };
 

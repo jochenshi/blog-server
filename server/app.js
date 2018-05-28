@@ -1,9 +1,23 @@
 const Koa = require("koa");
 const logger = require("koa-logger");
+const Router = require('koa-router');
 
 const app = new Koa();
+const router = new Router();
+
+const paper = require('../routes/paper');
+const user = require('../routes/user');
 
 app.use(logger());
+app.use(async (ctx, next) => {
+        console.log(111);
+        ctx.body = "hello";
+        next()
+    });
+app.use(paper.routes());
+app.use(user.routes());
+
+
 
 // app.use(async (ctx, next) => {
 //     const start = new Date();
@@ -13,9 +27,9 @@ app.use(logger());
 // });
 
 
-app.use(async (ctx) => {
-    ctx.body = "hello"
-});
+
+/*app.use(paper.routes())
+    .use(paper.allowedMethods());*/
 
 
 

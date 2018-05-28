@@ -12,12 +12,18 @@ const outPath = path.join(__dirname, '../build');
 const config = merge(baseConfig, {
     mode: 'production',
     devtool: 'source-map',
+    output: {
+        filename: "js/[name].[chunkhash].js",
+        chunkFilename: "js/[name].[chunkhash].chunk.js"
+    },
 
     plugins: [
         new CleanWebpackPlugin(['build'], {
             root: rootPath
         }),
-        new HtmlWebpackPlugin({template: sourcePath + 'index.html'})
+        new HtmlWebpackPlugin({
+            template: sourcePath + 'index.html'
+        })
     ]
 });
 
