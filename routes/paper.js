@@ -2,14 +2,18 @@ const Koa = require('koa');
 const koaLogger = require('koa-logger');
 const Router = require('koa-router');
 
+let transformFile = require('../server/methods/tranformFile');
+
 let router = new Router({
     prefix: '/papers'
 });
 
 
 //查询文章
-router.get('/', (ctx, next) => {
+router.get('/', async (ctx, next) => {
     console.log(222);
+    let tt = await transformFile("./server/methods/test.md");
+    console.log('tt', tt)
     ctx.response.body = 'asdasdasd'
 });
 
