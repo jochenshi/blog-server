@@ -5,14 +5,27 @@ const Router = require('koa-router');
 const app = new Koa();
 const router = new Router();
 
+const logTool = require('../src/common/log/logTool');
+
 const paper = require('../routes/paper');
 const user = require('../routes/user');
 
 app.use(logger());
 app.use(async (ctx, next) => {
+        const start = new Date();
+        let ms;
         console.log(111);
-        ctx.body = "hello";
-        next()
+        //ctx.body = "hello";
+        try {
+            await next();
+
+            ms = new Date() - start;
+
+            logTool.logResponse(ctx, ms)
+        } catch (error) {
+            ms = new Date() - start;
+            logTool.logError(ctx, error, ms);
+        }
     });
 app.use(paper.routes());
 app.use(user.routes());
