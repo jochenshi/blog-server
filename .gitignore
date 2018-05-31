@@ -4,6 +4,7 @@ dist/
 build/
 static/build/
 .idea/
+.vscode/
 npm-debug.log*
 package-lock.json
 yarn-debug.log*
