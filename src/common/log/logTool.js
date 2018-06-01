@@ -9,20 +9,22 @@ let errorLogger = log4js.getLogger('errorLogger');
 let resLogger = log4js.getLogger('resLogger');
 
 let logTool = {
-    "logError": (ctx, error, resTime) => {
-        errorLogger.error(formartError(ctx, error, resTime));
+    "logError": (ctx, error, start, end) => {
+        errorLogger.error(formartError(ctx, error, start, end));
     },
 
-    "logResponse": (ctx, resTime) => {
-        resLogger.info(formatResponse(ctx, resTime));
+    "logResponse": (ctx, start, end) => {
+        resLogger.info(formatResponse(ctx, start, end));
     }
 };
 
 
 //格式化请求的日志
-let formatRequest = (req, resTime) => {
+let formatRequest = (req, start, end) => {
     let logText = "";
     let method = req.method;
+
+    logText += "request start time: " + start + "\n";
 
     logText += "request method: " + method + "\n";
 
@@ -36,7 +38,9 @@ let formatRequest = (req, resTime) => {
         logText += "request body: " + "\n" + JSON.stringify(req.body) + "\n";
     }
 
-    logText += "response time: " + resTime + "\n";
+    logText += "response time: " + end + "\n";
+
+    logText += "request used time: " + (end - start) + "\n";
 
     return logText;
 };
@@ -44,12 +48,12 @@ let formatRequest = (req, resTime) => {
 
 
 //格式化请求的响应的日志
-let formatResponse = (ctx, resTime) => {
+let formatResponse = (ctx, start, end) => {
     let logText = '';
 
     logText += "\n" + "======================== response log start =============" + "\n";
 
-    logText += formatRequest(ctx.request, resTime);
+    logText += formatRequest(ctx.request, start, end);
 
     logText += "response status: " + ctx.status + "\n";
 
@@ -61,12 +65,12 @@ let formatResponse = (ctx, resTime) => {
 };
 
 //格式化错误日志
-let formartError = (ctx, err, resTime) => {
+let formartError = (ctx, err, start, end) => {
     let logText = '';
 
     logText += "\n" + "======================= error log start ======================" + "\n";
 
-    logText += formatRequest(ctx.request, resTime);
+    logText += formatRequest(ctx.request, start, end);
 
     logText += "error name: " + err.name + "\n";
 

@@ -10,23 +10,27 @@ const logTool = require('../src/common/log/logTool');
 const paper = require('../routes/paper');
 const user = require('../routes/user');
 
+//用于在console中打印相关的日志
 app.use(logger());
+
+//用于过滤所有的请求，并根据相应的规则生成关于请求，错误的日志的记录
 app.use(async (ctx, next) => {
         const start = new Date();
-        let ms;
+        let end;
         console.log(111);
         //ctx.body = "hello";
         try {
             await next();
+            end = new Date();
 
-            ms = new Date() - start;
-
-            logTool.logResponse(ctx, ms)
+            logTool.logResponse(ctx, start, end)
         } catch (error) {
-            ms = new Date() - start;
-            logTool.logError(ctx, error, ms);
+            end = new Date();
+            logTool.logError(ctx, error, start, end);
         }
     });
+
+//加载具体的各个模块的路由
 app.use(paper.routes());
 app.use(user.routes());
 
