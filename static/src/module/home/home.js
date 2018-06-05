@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Switch, Route, Redirect} from 'react-router-dom'
+import {Switch, Route, Redirect, Link} from 'react-router-dom'
 
 import {Layout, Menu, Icon} from 'antd';
 const {Header, Content, Footer, Sider} = Layout;
@@ -19,10 +19,14 @@ class Home extends Component{
     }
 
     handleClick = (e) => {
-        console.log(this.props);
         this.setState({
             selectedMenu: e.key
-        })
+        });
+        let newPath = this.props.match.path + "/" + e.key;
+        if (this.props.location.pathname !== newPath) {
+            this.props.history.push(newPath);
+            console.log(this.props)
+        }
     };
 
     render() {
@@ -39,20 +43,28 @@ class Home extends Component{
                         theme={"dark"}
                         mode={"inline"}>
                         <Menu.Item key={"home"}>
-                            <Icon type={'home'}/>
-                            <span>首页</span>
+                            {/*<Link to={"/auth/home"}>*/}
+                                <Icon type={'home'}/>
+                                <span>首页</span>
+                            {/*</Link>*/}
                         </Menu.Item>
                         <Menu.Item key={"paperManage"}>
-                            <Icon type="file-text" />
-                            <span>文章管理</span>
+                            {/*<Link to={"/auth/paperManage"}>*/}
+                                <Icon type="file-text" />
+                                <span>文章管理</span>
+                            {/*</Link>*/}
                         </Menu.Item>
                         <Menu.Item key={"userManage"}>
-                            <Icon type={"user"}/>
-                            <span>用户管理</span>
+                            {/*<Link to={"/auth/userManage"}>*/}
+                                <Icon type={"user"}/>
+                                <span>用户管理</span>
+                            {/*</Link>*/}
                         </Menu.Item>
                         <Menu.Item key={"setting"}>
-                            <Icon type={"setting "}/>
-                            <span>系统设置</span>
+                            {/*<Link to={"/auth/setting"}>*/}
+                                <Icon type={"setting "}/>
+                                <span>系统设置</span>
+                            {/*</Link>*/}
                         </Menu.Item>
                     </Menu>
                 </Sider>
@@ -60,11 +72,11 @@ class Home extends Component{
                     <Header></Header>
                     <Content style={{margin: '0 30px'}}>
                         <Switch>
-                            <Route path={`${this.props.match.path}/main`} component={MainPage}/>
+                            <Route path={`${this.props.match.path}/home`} component={MainPage}/>
                             <Route path={`${this.props.match.path}/paperManage`} component={PaperManage}/>
                             <Route path={`${this.props.match.path}/userManage`} component={UserManage}/>
                             <Route path={`${this.props.match.path}/setting`} component={SystemSetting}/>
-                            <Redirect to={`${this.props.match.path}/main`}/>
+                            <Redirect to={`${this.props.match.path}/home`}/>
                         </Switch>
                     </Content>
                     <Footer>All rights are reserved by jochenshi</Footer>
