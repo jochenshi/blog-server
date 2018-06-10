@@ -13,7 +13,7 @@ let transformFile = async (file) => {
                 console.log(err);
                 reject(err);
             } else {
-                let temp = marked.lexer(data);
+                let temp = marked(data);
                 setTimeout(() => {
                     resolve(temp)
                 }, 3000)

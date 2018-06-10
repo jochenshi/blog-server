@@ -5,6 +5,7 @@ import 'antd/dist/antd.css'
 
 import Home from "./module/home/home";
 import Login from "./module/login/login";
+import CreatePaper from "./module/createPaper";
 
 
 
@@ -17,9 +18,10 @@ class App extends Component{
         return (
             <Router>
                 <Switch>
-                    <Route path={'/auth'} component={Home}/>
+                    <Route path={'/auth/main/createPaper'} component={CreatePaper}/>
+                    <Route path={'/auth/main'} component={Home}/>
                     <Route path={'/login'} component={Login}/>
-                    <Redirect to={'/auth'}/>
+                    <Redirect to={'/auth/main'}/>
                 </Switch>
             </Router>
         )

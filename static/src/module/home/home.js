@@ -9,6 +9,7 @@ import MainPage from "../mainPage/mainPage";
 import PaperManage from "../paperManage/paperManage";
 import UserManage from "../userManage/userManage";
 import SystemSetting from "../setting/SystemSetting";
+import CreatePaper from "../createPaper";
 
 class Home extends Component{
     constructor(props) {
@@ -74,6 +75,7 @@ class Home extends Component{
                         <Switch>
                             <Route path={`${this.props.match.path}/home`} component={MainPage}/>
                             <Route path={`${this.props.match.path}/paperManage`} component={PaperManage}/>
+                            <Route path={`${this.props.match.path}/createPaper`} component={CreatePaper}/>
                             <Route path={`${this.props.match.path}/userManage`} component={UserManage}/>
                             <Route path={`${this.props.match.path}/setting`} component={SystemSetting}/>
                             <Redirect to={`${this.props.match.path}/home`}/>
