@@ -8,9 +8,52 @@
   }
   .markdown-area{
     display flex
+    flex-direction column
+    .markdown-title{
+      padding 10px
+      font-size 30px
+      line-height 30px
+      outline none
+      box-shadow none
+      border none
+    }
+    .markdown-operation{
+      background-color #d9d9d9
+      list-style none
+      margin 0
+      padding 0
+      padding-left 10px
+      li{
+        font-size 20px
+        display inline-block
+        cursor pointer
+        padding 8px 12px
+        &:hover{
+          background-color #595959
+          color #f2f2f2
+        }
+        &.icon-paper{
+          float right
+          margin-right 10px
+        }
+      }
+    }
     .markdown-input{
+      font-size 18px
       width 100%
       outline none
+      flex 1
+    }
+  }
+  .display-area{
+    padding 10px
+    background-color #fcfaf2
+    .display-body{
+      pre{
+        background-color #e3e3e3
+        padding 10px
+        border-radius 5px
+      }
     }
   }
 }
