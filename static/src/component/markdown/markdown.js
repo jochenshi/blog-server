@@ -115,11 +115,6 @@ class Markdown extends Component{
         }
     };
 
-    //处理保存操作的事件
-    handleSave() {
-
-    }
-
     render() {
         return (
             <div className={"markdown-wrapper"}>
