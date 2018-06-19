@@ -33,6 +33,7 @@ class Markdown extends Component{
         ];
     }
 
+    //处理标题输入框的事件
     handleInput = (e) => {
         e.persist();
         this.inputFlag && clearTimeout(this.inputFlag);
@@ -43,6 +44,7 @@ class Markdown extends Component{
         }, 2000)
     };
 
+    //处理正文输入框的事件
     handleMark = (e) => {
         e.persist();
         this.timeFlag && clearTimeout(this.timeFlag);
@@ -73,6 +75,11 @@ class Markdown extends Component{
             }
         }
     };
+
+    //处理保存操作的事件
+    handleSave() {
+
+    }
 
     render() {
         return (
