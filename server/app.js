@@ -17,7 +17,6 @@ app.use(logger());
 app.use(async (ctx, next) => {
         const start = new Date();
         let end;
-        console.log(111);
         //ctx.body = "hello";
         try {
             await next();

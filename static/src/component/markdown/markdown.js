@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 
 import marked from 'marked'
 import highjs from 'highlight.js'
+import {Modal, Upload, Button} from 'antd'
 
 import 'highlight.js/styles/atom-one-dark.css'
 
@@ -33,10 +34,11 @@ class Markdown extends Component{
         super(props);
         this.state = {
             titleData: "ad",
-            htmlData: "asd"
+            htmlData: "asd",
+            uploadVisible: false
         };
         this.icons = [
-            {class: "icon-picture", title: "插入图片", key: "picture", click: this.uploadPicture},
+            {class: "icon-picture", title: "插入图片", key: "picture", click: this.handleUploadVisible},
             {class: "icon-save", title: "保存", key: "save", click: this.handleSave},
             {class: "icon-paper", title: "发布文章", key: "release-paper", click: this.releasePaper}
         ];
@@ -116,9 +118,33 @@ class Markdown extends Component{
         }
     };
 
+    handleUploadVisible = () => {
+        this.setState({
+            uploadVisible: !this.state.uploadVisible
+        });
+    };
+
+    handleUploadCancel = () => {
+        this.setState({
+            uploadVisible: false
+        });
+    };
+
     render() {
         return (
             <div className={"markdown-wrapper"}>
+                <Modal title={"上传图片"}
+                       visible={this.state.uploadVisible}
+                       onCancel={this.handleUploadVisible}
+                       onOk={this.uploadPicture.bind(this)}
+                       okText={"确认"}
+                       cancelText={"取消"}
+                       maskClosable={false}
+                >
+                    <Upload>
+                        <Button type={"upload"}>Click to upload Picture</Button>
+                    </Upload>
+                </Modal>
                 <div className={"markdown-area"}>
                     <input className={"markdown-title"} onChange={this.handleInput} placeholder={"请输入标题"}/>
                     <ul className={"markdown-operation"}>
