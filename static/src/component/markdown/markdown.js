@@ -7,6 +7,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 
 import './markdown.styl'
 
+
 marked.setOptions({
     highlight: code => highjs.highlightAuto(code).value,
     renderer: new marked.Renderer(),
@@ -35,7 +36,7 @@ class Markdown extends Component{
             htmlData: "asd"
         };
         this.icons = [
-            {class: "icon-picture", title: "图片", key: "picture", click: this.uploadPicture},
+            {class: "icon-picture", title: "插入图片", key: "picture", click: this.uploadPicture},
             {class: "icon-save", title: "保存", key: "save", click: this.handleSave},
             {class: "icon-paper", title: "发布文章", key: "release-paper", click: this.releasePaper}
         ];
