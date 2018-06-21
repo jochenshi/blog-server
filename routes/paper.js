@@ -5,13 +5,14 @@ const COS = require("cos-nodejs-sdk-v5");
 const path = require("path");
 
 let transformFile = require('../server/methods/tranformFile');
+let {getAuth} = require("../server/methods/handle-cos");
 
 let router = new Router({
     prefix: '/papers'
 });
 
 let cos = new COS({
-    AppId: "1256955134",
+    //AppId: "1256955134",
     SecretId: "AKIDPgs5NYhVEl5CBxys0ua2HJ8lEUYMal5A",
     SecretKey: "ygCSUGm6E6lLjusdBh3C7pJhsxynWFrM"
 });
@@ -22,7 +23,7 @@ router.get("/picture", (ctx, next) => {
     cos.sliceUploadFile({
         Bucket: "blog-1256955134",
         Region: "ap-shanghai",
-        Key: "topBackground.jpg",
+        Key: "topBackground1.jpg",
         FilePath: path.resolve(__dirname, "topBackground.jpg")
     }, (err, data) => {
         if (err) {
@@ -33,6 +34,10 @@ router.get("/picture", (ctx, next) => {
             ctx.response.body = data
         }
     })
+});
+
+router.get("/getAuth", (ctx, next) => {
+    getAuth()
 });
 
 //查询文章
