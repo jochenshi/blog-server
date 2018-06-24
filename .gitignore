@@ -4,6 +4,7 @@ dist/
 build/
 logs/
 static/build/
+public/uploadFile/
 .idea/
 .vscode/
 npm-debug.log*
