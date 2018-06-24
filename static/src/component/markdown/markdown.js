@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import marked from 'marked'
 import highjs from 'highlight.js'
 import {Modal, Upload, Button} from 'antd'
+import axios from 'axios'
 
 import 'highlight.js/styles/atom-one-dark.css'
 
@@ -35,7 +36,9 @@ class Markdown extends Component{
         this.state = {
             titleData: "ad",
             htmlData: "asd",
-            uploadVisible: false
+            popVisible: false,
+            uploadVisible: true,
+            urlData: ""
         };
         this.icons = [
             {class: "icon-picture", title: "插入图片", key: "picture", click: this.handleUploadVisible},
@@ -74,6 +77,10 @@ class Markdown extends Component{
 
     //处理添加图片的事件
     uploadPicture() {
+        this.setState({
+            popVisible: !this.state.popVisible,
+            uploadVisible: true
+        });
         if (typeof this.props.uploadPicture === "function") {
             console.log("this can trigger save function");
             this.props.uploadPicture.call(this);
@@ -101,6 +108,7 @@ class Markdown extends Component{
     //处理按键按下的事件，在此处是为了实现Tab缩进的效果
     handleKeyDown = (e) => {
         e.persist();
+        //处理按下tab
         if (e.keyCode === 9) {
             let target = e.target;
             let nowPosition = target.selectionStart + 4;
@@ -118,32 +126,67 @@ class Markdown extends Component{
         }
     };
 
-    handleUploadVisible = () => {
+    handleUploadVisible = (e) => {
+        e.persist();
         this.setState({
-            uploadVisible: !this.state.uploadVisible
+            popVisible: !this.state.popVisible,
+            uploadVisible: true
         });
     };
 
-    handleUploadCancel = () => {
-        this.setState({
-            uploadVisible: false
+    handleUploadRequest = (data) => {
+        console.log(data);
+        let temp = data.file;
+        let datas = new FormData();
+        datas.append("file", temp);
+        console.log(datas.get("file"));
+        axios({
+            method: 'post',
+            url: 'http://localhost:8083/papers/upload',
+            data: datas,
+            onUploadProgress: (process) => {
+                console.log(process)
+            }
         });
+        //axios.post("http://localhost:8083/papers/upload", datas)
+    };
+
+    handleUploadChange = (process) => {
+        if (process.file.status === "done") {
+            console.log(process);
+            console.log(process.file.response.data.location);
+            this.setState({
+                uploadVisible: false,
+                urlData: '![](' + process.file.response.data.location + ')'
+            })
+        }
     };
 
     render() {
         return (
             <div className={"markdown-wrapper"}>
                 <Modal title={"上传图片"}
-                       visible={this.state.uploadVisible}
+                       className={"upload-pop"}
+                       visible={this.state.popVisible}
                        onCancel={this.handleUploadVisible}
                        onOk={this.uploadPicture.bind(this)}
                        okText={"确认"}
                        cancelText={"取消"}
+                       destroyOnClose={true}
                        maskClosable={false}
                 >
-                    <Upload>
-                        <Button type={"upload"}>Click to upload Picture</Button>
-                    </Upload>
+                    {
+                        this.state.uploadVisible ?
+                            <Upload
+                                action={"http://localhost:8083/papers/upload"}
+                                onChange={this.handleUploadChange}
+                                //customRequest={this.handleUploadRequest}
+                            >
+                                <Button type={"upload"}>Click to upload Picture</Button>
+                            </Upload> :
+                            <div className={"file-url"}>{this.state.urlData}</div>
+                    }
+                    {/*<input type="file"/>*/}
                 </Modal>
                 <div className={"markdown-area"}>
                     <input className={"markdown-title"} onChange={this.handleInput} placeholder={"请输入标题"}/>

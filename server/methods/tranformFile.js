@@ -1,5 +1,6 @@
 const marked = require('marked');
-const fs = require('fs');
+const fs = require('fs');;
+const Busboy = require('busboy');
 
 marked.setOptions({
     renderer: new marked.Renderer()
@@ -24,4 +25,25 @@ let transformFile = async (file) => {
     return p;
 };
 
-module.exports = transformFile;
+let uploadFile = (ctx, options) => {
+    let req = ctx.req;
+    let busboy = new Busboy({headers: req.headers});
+    return new Promise((resolve, reject) => {
+        console.log("uploading");
+        busboy.on("file", (fieldname, file, filename) => {
+            console.log(file);
+            file.on("end", () => {
+                console.log("upload ok");
+                resolve("ok")
+            })
+        })
+        busboy.on("error",  (err) => {
+            console.log("upload failed");
+            reject("field")
+        })
+    })
+}
+
+module.exports = {
+    transformFile, uploadFile
+};

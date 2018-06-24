@@ -1,3 +1,5 @@
+const path = require('path');
+
 const config = {
     port: 8089,
     AppId: "1256955134",
@@ -7,4 +9,11 @@ const config = {
     Domain: 'sts.api.qcloud.com'
 };
 
-module.exports = config;
+const uploadConfig = {
+    directory: path.resolve(__dirname, '../public/uploadFile'),
+    destination: 'server' //local
+};
+
+module.exports = {
+    config, uploadConfig
+};

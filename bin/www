@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-let config = require('../config/config');
+let {config} = require('../config/config');
 
 let app = require('../server/app');
 

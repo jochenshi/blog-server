@@ -1,39 +1,24 @@
 const Koa = require('koa');
 const koaLogger = require('koa-logger');
 const Router = require('koa-router');
-const COS = require("cos-nodejs-sdk-v5");
 const path = require("path");
+const koaBody = require('koa-body');
 
-let transformFile = require('../server/methods/tranformFile');
-let {getAuth} = require("../server/methods/handle-cos");
+let {transformFile} = require('../server/methods/tranformFile');
+let {handleUploadFile} = require('../server/methods/papers');
 
 let router = new Router({
     prefix: '/papers'
 });
 
-let cos = new COS({
-    //AppId: "1256955134",
-    SecretId: "AKIDPgs5NYhVEl5CBxys0ua2HJ8lEUYMal5A",
-    SecretKey: "ygCSUGm6E6lLjusdBh3C7pJhsxynWFrM"
-});
-
-//上传图片
-router.get("/picture", (ctx, next) => {
-    //ctx.response.body = 'asdasdasd'
-    cos.sliceUploadFile({
-        Bucket: "blog-1256955134",
-        Region: "ap-shanghai",
-        Key: "topBackground1.jpg",
-        FilePath: path.resolve(__dirname, "topBackground.jpg")
-    }, (err, data) => {
-        if (err) {
-            console.log("asd",err);
-            ctx.response.body = "asdasd"
-        } else {
-            console.log("asd",data);
-            ctx.response.body = data
-        }
-    })
+/*上传文件的入口*/
+router.post("/upload",koaBody({
+    multipart: true,
+    formidable: {
+        maxFileSize: 200*1024*1024    // 设置上传文件大小最大限制，默认2M
+    }
+}), async (ctx, next) => {
+    await handleUploadFile(ctx);
 });
 
 router.get("/getAuth", (ctx, next) => {
@@ -44,7 +29,7 @@ router.get("/getAuth", (ctx, next) => {
 router.get('/', async (ctx, next) => {
     console.log(222);
     let tt = await transformFile("./server/methods/test.md");
-    console.log('tt', tt)
+    console.log('tt', tt);
     ctx.response.body = 'asdasdasd'
 });
 

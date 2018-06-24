@@ -13,6 +13,7 @@ const config = merge(baseConfig, {
     mode: 'production',
     devtool: 'source-map',
     output: {
+        publicPath: "/",
         filename: "js/[name].[chunkhash].js",
         chunkFilename: "js/[name].[chunkhash].chunk.js"
     },
