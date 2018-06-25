@@ -36,12 +36,21 @@ class CreatePaper extends Component{
             })
         }, 2000)
 
-    }
+    };
+
+    //将文章的内容保存到数据库的方法
+    handleSave = (title, data) => {
+        console.log(title, data);
+        let saveData = {
+            title: title,
+            content: data
+        };
+    };
 
     render() {
         return (
             <div className={"create-paper-area"}>
-                <Markdown/>
+                <Markdown handleSave={this.handleSave}/>
                 {/*<div className={"markdown-area"}>
                     <textarea onChange={this.handleInput}></textarea>
                 </div>

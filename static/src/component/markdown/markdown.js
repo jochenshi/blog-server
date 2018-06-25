@@ -34,8 +34,8 @@ class Markdown extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            titleData: "ad",
-            htmlData: "asd",
+            titleData: "",
+            htmlData: "",
             popVisible: false,
             uploadVisible: true,
             urlData: ""
@@ -186,7 +186,6 @@ class Markdown extends Component{
                             </Upload> :
                             <div className={"file-url"}>{this.state.urlData}</div>
                     }
-                    {/*<input type="file"/>*/}
                 </Modal>
                 <div className={"markdown-area"}>
                     <input className={"markdown-title"} onChange={this.handleInput} placeholder={"请输入标题"}/>
