@@ -14,6 +14,14 @@ const uploadConfig = {
     destination: 'server' //local
 };
 
+const dbConfig = {
+    username: "rootUser",
+    password: "qwertyui1",
+    ip: "47.98.136.125",
+    port: "27017",
+    database: "bolgServer"
+};
+
 module.exports = {
-    config, uploadConfig
+    config, uploadConfig, dbConfig
 };

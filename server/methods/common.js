@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const {uploadConfig} = require('../../config/config');
+const {uploadConfig, dbConfig} = require('../../config/config');
 
 /*
 * 将上传的文件保存到服务器
@@ -29,6 +29,14 @@ let formatResponse = (flag, data) => {
     }
 };
 
+/*
+* 读取数据库配置文件并生成可连接的数据库地址的方法
+* */
+let generateDatabaseUrl = () => {
+    let {username, password, ip, port, database} = dbConfig;
+    return "mongodb://" + username + ":" + password + "@" + ip + ":" + port + "/blogServer?authSource=admin"
+};
+
 module.exports = {
-    saveFileToLocal,  formatResponse
+    saveFileToLocal,  formatResponse, generateDatabaseUrl
 };
