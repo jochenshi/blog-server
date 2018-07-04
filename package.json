@@ -24,7 +24,7 @@
     "koa-router": "^7.4.0",
     "log4js": "^2.8.0",
     "marked": "^0.4.0",
-    "mongoose": "^5.2.0",
+    "mongoose": "^5.2.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-router": "^4.2.0",

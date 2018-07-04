@@ -15,8 +15,8 @@ let options = {
     pass: "qwertyui1"
 };
 
-mongoose.connect("mongodb://47.98.136.125:27017/blogServer", options);
-//mongoose.connect(temp);
+//mongoose.connect("mongodb://47.98.136.125:27017/blogServer", options);
+mongoose.connect(temp);
 
 let db = mongoose.connection;
 
@@ -30,7 +30,7 @@ db.on("open", () => {
         name: String
     });
     let Name = mongoose.model("test1", ss);
-    var aa = new Name({name: "asdasd"});
+    var aa = new Name({name: "11111"});
     aa.save((err) => {
         if (err) {
             console.log(err)
