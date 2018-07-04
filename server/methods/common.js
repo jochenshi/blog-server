@@ -34,7 +34,7 @@ let formatResponse = (flag, data) => {
 * */
 let generateDatabaseUrl = () => {
     let {username, password, ip, port, database} = dbConfig;
-    return "mongodb://" + username + ":" + password + "@" + ip + ":" + port + "/blogServer?authSource=admin"
+    return "mongodb://" + username + ":" + password + "@" + ip + ":" + port + "/" + database + "?authSource=admin"
 };
 
 module.exports = {
