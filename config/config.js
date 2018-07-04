@@ -19,7 +19,7 @@ const dbConfig = {
     password: "qwertyui1",
     ip: "47.98.136.125",
     port: "27017",
-    database: "bolgServer"
+    database: "blogServer"
 };
 
 module.exports = {
