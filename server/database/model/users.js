@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
 
-console.log("execute user.js");
 const userModel = new Schema({
-    userName: {
+    username: {
         type: String,
         required: true
     },
@@ -19,6 +18,6 @@ const userModel = new Schema({
 });
 
 module.exports = {
-    name: "user",
+    name: "users",
     model: userModel
 };

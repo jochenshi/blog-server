@@ -26,6 +26,7 @@ const blogs = new Schema(
     }
 );
 
+
 module.exports = {
     name: "blogs",
     model: blogs

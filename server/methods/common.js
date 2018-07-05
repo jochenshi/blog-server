@@ -33,8 +33,8 @@ let formatResponse = (flag, data) => {
 * 读取数据库配置文件并生成可连接的数据库地址的方法
 * */
 let generateDatabaseUrl = () => {
-    let {username, password, ip, port, database} = dbConfig;
-    return "mongodb://" + username + ":" + password + "@" + ip + ":" + port + "/" + database + "?authSource=admin"
+    let {ip, port, database} = dbConfig;
+    return "mongodb://" + ip + ":" + port + "/" + database
 };
 
 module.exports = {
