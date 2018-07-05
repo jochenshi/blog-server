@@ -1,15 +1,19 @@
 const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
+
+console.log("execute user.js");
 const userModel = new Schema({
-    userName: String,
-    password: String,
+    userName: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     nickName: String,
     extra: String,
-    createTime: {
-        type: Date,
-        default: Date.now()
-    },
     valid: Boolean,
     role: Array
 });
