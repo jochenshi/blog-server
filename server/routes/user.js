@@ -1,7 +1,8 @@
 const Koa = require('koa');
 const koaLogger = require('koa-logger');
 const Router = require('koa-router');
-const modelInfo = require("../server/database/model");
+const modelInfo = require("../database/model/index");
+const {handleUserAdd} = require("../control/user");
 
 let router = new Router({
     prefix: '/users'
@@ -14,14 +15,14 @@ router.get('/', (ctx, next) => {
     ctx.response.body = ctx
 });
 
-router.get("/test", (ctx, next) => {
-    let test1 = new modelInfo.users({
+router.get("/test", async (ctx, next) => {
+    let data = {
         username: "qweer",
         password: "asdasdasd",
         nickName: "nickName1"
-    });
-
-    test1.save();
+    };
+    await handleUserAdd(data, ctx)
+    //ctx.response.body = {name: "asdas"}
 });
 
 router.get('/:id', (ctx, next) => {

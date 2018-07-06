@@ -10,8 +10,8 @@ const router = new Router();
 
 const logTool = require('../src/common/log/logTool');
 
-const paper = require('../routes/paper');
-const user = require('../routes/user');
+const paper = require('./routes/paper');
+const user = require('./routes/user');
 
 /*app.use(koaBody({
     multipart: true,

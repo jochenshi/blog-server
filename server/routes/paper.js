@@ -4,8 +4,8 @@ const Router = require('koa-router');
 const path = require("path");
 const koaBody = require('koa-body');
 
-let {transformFile} = require('../server/methods/tranformFile');
-let {handleUploadFile} = require('../server/methods/papers');
+let {transformFile} = require('../methods/tranformFile');
+let {handleUploadFile} = require('../methods/papers');
 
 let router = new Router({
     prefix: '/papers'

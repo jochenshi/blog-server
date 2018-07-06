@@ -11,10 +11,18 @@ const userModel = new Schema({
         type: String,
         required: true
     },
-    nickName: String,
-    extra: String,
-    valid: Boolean,
+    nickname: String,
+    extra: {
+        type: String,
+        default: ""
+    },
+    valid: {
+        type: Boolean,
+        default: true
+    },
     role: Array
+},{
+    timestamps: true
 });
 
 module.exports = {
