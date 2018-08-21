@@ -12,7 +12,17 @@ const config = merge(baseConfig, {
     },
     plugins: [
         new HtmlWebpackPlugin({template: sourcePath + 'index.html'})
-    ]
+    ],
+    devServer: {
+        historyApiFallback: true,
+        port: 8080,
+        host: '0.0.0.0',
+        proxy: {
+            '/papers/*': {
+                target: 'http://localhost:8089'
+            }
+        }
+    }
 });
 
 module.exports = config;

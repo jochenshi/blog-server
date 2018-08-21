@@ -10,6 +10,7 @@ import PaperManage from "../paperManage/paperManage";
 import UserManage from "../userManage/userManage";
 import SystemSetting from "../setting/SystemSetting";
 import CreatePaper from "../createPaper";
+import OptionManage from "../optionManage";
 
 class Home extends Component{
     constructor(props) {
@@ -61,6 +62,12 @@ class Home extends Component{
                                 <span>用户管理</span>
                             {/*</Link>*/}
                         </Menu.Item>
+                        <Menu.Item key={"optionManage"}>
+                            {/*<Link to={"/auth/userManage"}>*/}
+                            <Icon type={"profile"}/>
+                            <span>选项管理</span>
+                            {/*</Link>*/}
+                        </Menu.Item>
                         <Menu.Item key={"setting"}>
                             {/*<Link to={"/auth/setting"}>*/}
                                 <Icon type={"setting "}/>
@@ -76,6 +83,7 @@ class Home extends Component{
                             <Route path={`${this.props.match.path}/home`} component={MainPage}/>
                             <Route path={`${this.props.match.path}/paperManage`} component={PaperManage}/>
                             <Route path={`${this.props.match.path}/createPaper`} component={CreatePaper}/>
+                            <Route path={`${this.props.match.path}/optionManage`} component={OptionManage}/>
                             <Route path={`${this.props.match.path}/userManage`} component={UserManage}/>
                             <Route path={`${this.props.match.path}/setting`} component={SystemSetting}/>
                             <Redirect to={`${this.props.match.path}/home`}/>

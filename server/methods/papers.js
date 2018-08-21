@@ -3,6 +3,7 @@ const fs = require('fs');
 const {uploadConfig} = require('../../config/config');
 const {uploadToCos} = require('./handle-cos');
 const {saveFileToLocal} = require('./common');
+const {blogs} = require('../database/model');
 
 /*
 * 处理上传文件的操作*/
@@ -27,6 +28,22 @@ let handleUploadFile = async (ctx) => {
             message: 'invalid data',
             data: []
         }
+    }
+};
+
+/*
+*  处理保存文章的操作
+* */
+let handleSaveFile = async (ctx) => {
+    const {title, content, id} = ctx.request.body || '';
+    if(!title || !content){
+        ctx.response.body = {
+            result: false,
+            message: 'title or content can not be empty',
+            data: []
+        };
+    }else {
+
     }
 };
 

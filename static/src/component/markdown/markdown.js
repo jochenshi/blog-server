@@ -35,6 +35,7 @@ class Markdown extends Component{
         super(props);
         this.state = {
             titleData: "",
+            rawData: '',
             htmlData: "",
             popVisible: false,
             uploadVisible: true,
@@ -61,18 +62,21 @@ class Markdown extends Component{
     //处理正文输入框的事件
     handleMark = (e) => {
         e.persist();
+        this.setState({
+            rawData: e.target.value,
+        });
         this.timeFlag && clearTimeout(this.timeFlag);
         this.timeFlag = setTimeout(() => {
-            console.log(marked.lexer(e.target.value));
+            console.log(e.target.value);
             this.setState({
                 htmlData: marked(e.target.value)
             })
-        }, 2000)
+        }, 2000);
     };
 
     //处理点击保存按钮以及触发保存操作时的事件
     handleSave() {
-        this.handleClick("handleSave", this, this.state.titleData, this.state.htmlData);
+        this.handleClick("handleSave", this, this.state.titleData, this.state.rawData);
     }
 
     //处理添加图片的事件
@@ -142,7 +146,7 @@ class Markdown extends Component{
         console.log(datas.get("file"));
         axios({
             method: 'post',
-            url: 'http://localhost:8083/papers/upload',
+            url: '/papers/upload',
             data: datas,
             onUploadProgress: (process) => {
                 console.log(process)
@@ -178,7 +182,7 @@ class Markdown extends Component{
                     {
                         this.state.uploadVisible ?
                             <Upload
-                                action={"http://localhost:8083/papers/upload"}
+                                action={"http://localhost:8080/papers/upload"}
                                 onChange={this.handleUploadChange}
                                 //customRequest={this.handleUploadRequest}
                             >
@@ -203,6 +207,7 @@ class Markdown extends Component{
                         }
                     </ul>
                     <textarea
+                        value={this.state.rawData}
                         className={"markdown-input"}
                         onKeyDown={this.handleKeyDown}
                         onChange={this.handleMark}/>

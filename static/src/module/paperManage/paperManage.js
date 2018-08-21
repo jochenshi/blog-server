@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 
-import {Table, Button} from 'antd'
-import './paperManage.styl'
+import {Table, Button} from 'antd';
+import CreateBlog from './createPaper';
+import './paperManage.styl';
 
 class PaperManage extends Component {
     constructor(props) {
@@ -33,15 +34,56 @@ class PaperManage extends Component {
                 dataIndex: "createTime"
             }
         ];
+        this.state = {
+            'addVisible': false
+        };
+    }
+
+    /*
+    *  处理新建博客的弹框的隐藏
+    * */
+    handleAddHide = () => {
+        this.setState({
+            'addVisible': false
+        });
+    }
+
+    /*
+    *  处理新建博客的弹框的确定操作
+    * */
+    handleAddConfirm = () => {
+        const form = this.addForm.props.form;
+        form.validateFields((err, values) => {
+            if(err) {
+                return;
+            }
+            console.log('Received Values:', values);
+        });
     }
 
     render() {
+        const {addVisible} = this.state;
         return (
             <div className={'paper-manage'}>
                 <div className={"button-area"}>
-                    <Button type={"primary"}><Link to={"/auth/main/createPaper"}>写文章</Link></Button>
+                    <Button type={"primary"} onClick={() => {
+                        this.setState({
+                            'addVisible': true
+                        });
+                    }}>
+                        新建文章
+                    </Button>
+                    {/*<Button type={"primary"}><Link to={"/auth/main/createPaper"}>写文章</Link></Button>*/}
                 </div>
                 <Table columns={this.columns}/>
+                <CreateBlog
+                    visible={addVisible}
+                    wrappedComponentRef={(formRef) => {
+                        this.addForm = formRef;
+                    }}
+                    onCreate={this.handleAddConfirm}
+                    onCancel={this.handleAddHide}
+                />
             </div>
         )
     }

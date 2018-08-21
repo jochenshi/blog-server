@@ -43,8 +43,10 @@ router.get('/:id', (ctx, next) => {
 
 
 //新增文章
-router.post('/', (ctx, next) => {
-
+router.post('/', koaBody() ,(ctx, next) => {
+    const data = ctx.request.body;
+    console.log(data);
+    ctx.response.body = data;
 });
 
 

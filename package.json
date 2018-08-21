@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-server": "node ./bin/www",
     "build": "webpack --config=static/script/webpack.prod.config.js",
-    "start-front": "webpack-dev-server --config=static/script/webpack.dev.config.js --history-api-fallback --host 0.0.0.0 --port 8080"
+    "start-front": "webpack-dev-server --config=static/script/webpack.dev.config.js"
   },
   "keywords": [],
   "author": "",

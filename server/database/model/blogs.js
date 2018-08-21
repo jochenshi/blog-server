@@ -17,6 +17,9 @@ const blogs = new Schema(
         tag: {
             type: Array
         },
+        category: {
+            type: Array
+        },
         extra: {
             type: String
         }

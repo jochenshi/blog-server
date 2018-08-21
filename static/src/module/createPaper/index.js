@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
-import marked from 'marked'
+import React, {Component} from 'react';
+import marked from 'marked';
+import axios from 'axios';
 
 import './index.styl'
 
@@ -39,12 +40,16 @@ class CreatePaper extends Component{
     };
 
     //将文章的内容保存到数据库的方法
-    handleSave = (title, data) => {
-        console.log(title, data);
+    handleSave = (title, content) => {
+        console.log({
+            title,
+            content
+        });
         let saveData = {
             title: title,
-            content: data
+            content: content
         };
+        axios.post('/papers', saveData);
     };
 
     render() {

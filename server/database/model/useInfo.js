@@ -1,21 +1,18 @@
-/*
-*  主要用于存储用户名，密码等信息
-* */
-
 const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
 
-const userModel = new Schema({
-    username: {
-        type: String,
-        required: true
-    },
-    password: {
+const userInfoModel = new Schema({
+    userId: {
         type: String,
         required: true
     },
     nickname: String,
+    sex: String,
+    email: String,
+    birth: String,
+    location: String,
+    address: String,
     extra: {
         type: String,
         default: ""
@@ -23,13 +20,12 @@ const userModel = new Schema({
     valid: {
         type: Boolean,
         default: true
-    },
-    role: Array
+    }
 },{
     timestamps: true
 });
 
 module.exports = {
-    name: "users",
-    model: userModel
+    name: "userInfos",
+    model: userInfoModel
 };
