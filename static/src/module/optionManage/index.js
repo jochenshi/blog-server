@@ -39,13 +39,13 @@ class OptionManage extends Component {
         return (
             <div>
                 <Tabs defaultActiveKey={this.state.activeTab} onChange={this.handleTabChange}>
-                    <TabPane tab={'标签'} key={'tag'}/>
+                    {/*<TabPane tab={'标签'} key={'tag'}/>*/}
                     <TabPane tab={'分类'} key={'category'}/>
                 </Tabs>
                 <Switch>
                     <Route path={`${this.props.match.path}/tag`} component={TagPage}/>
                     <Route path={`${this.props.match.path}/category`} component={CategoryPage}/>
-                    <Redirect to={`${this.props.match.path}/tag`}/>
+                    <Redirect to={`${this.props.match.path}/category`}/>
                 </Switch>
             </div>
         )
