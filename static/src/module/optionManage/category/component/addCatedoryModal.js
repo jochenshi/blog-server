@@ -21,7 +21,7 @@ class AddCategoryModal extends Component{
     }
 
     render() {
-        const {form, modalVisible, onConfirm} = this.props;
+        const {form, modalVisible, onConfirm, confirmStatus} = this.props;
         const {getFieldDecorator} = form;
         const formItemLayout = {
             'labelCol': {
@@ -39,6 +39,8 @@ class AddCategoryModal extends Component{
                 cancelText={'取消'}
                 onOk={onConfirm}
                 onCancel={this.handleCancel}
+                confirmLoading={confirmStatus}
+                maskClosable={false}
             >
                 <Form>
                     <FormItem

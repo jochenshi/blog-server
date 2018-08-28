@@ -15,8 +15,9 @@ import OptionManage from "../optionManage";
 class Home extends Component{
     constructor(props) {
         super(props);
+        const selected = props.location.pathname.split('/')[3] || 'home';
         this.state = {
-            selectedMenu: "home"
+            selectedMenu: selected
         }
     }
 
@@ -30,6 +31,13 @@ class Home extends Component{
             console.log(this.props)
         }
     };
+
+    /*componentDidMount(){
+        const selected = this.props.location.pathname.split('/')[3] || 'home';
+        this.setState({
+            'selectedMenu': selected
+        });
+    }*/
 
     render() {
         return (

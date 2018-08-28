@@ -8,7 +8,8 @@ const categories = new Schema(
             type: String
         },
         value: {
-            required: true
+            required: true,
+            type: String
         },
         description: {
             type: String,

@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 import {Table, Button} from 'antd';
 import CreateBlog from './createPaper';
@@ -35,8 +36,27 @@ class PaperManage extends Component {
             }
         ];
         this.state = {
-            'addVisible': false
+            'addVisible': false,
+            'categoryList': []
         };
+    }
+
+    componentDidMount() {
+        this.getCategory();
+    }
+
+    /*
+    *  获取新建文章时分类的操作
+    * */
+    getCategory() {
+        axios({
+            'url': '/authen/category',
+            'type': 'GET'
+        }).then(val => {
+            this.setState({
+                'categoryList': val.data.data || []
+            });
+        });
     }
 
     /*
@@ -62,7 +82,7 @@ class PaperManage extends Component {
     }
 
     render() {
-        const {addVisible} = this.state;
+        const {addVisible, categoryList} = this.state;
         return (
             <div className={'paper-manage'}>
                 <div className={"button-area"}>
@@ -81,6 +101,7 @@ class PaperManage extends Component {
                     wrappedComponentRef={(formRef) => {
                         this.addForm = formRef;
                     }}
+                    categoryList={categoryList}
                     onCreate={this.handleAddConfirm}
                     onCancel={this.handleAddHide}
                 />

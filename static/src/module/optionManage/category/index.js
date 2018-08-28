@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Table, Button} from 'antd';
-import AddCategoryModal from './component/addCatedoryModal'
+import AddCategoryModal from './component/addCatedoryModal';
+import axios from 'axios';
 
 import './style.styl';
 
@@ -24,9 +25,37 @@ class CategoryPage extends Component {
         super(props);
         this.state = {
             'tableData': [],
+            'selectedRowKeys': [],
             'addModalVisible': false,
-            'loading': false
-        }
+            'loading': true,
+            'confirming': false
+        };
+    }
+
+    componentDidMount(){
+        this.handleGetCategory();
+    }
+
+    /*
+    *  获取分类的方法
+    * */
+    handleGetCategory = () => {
+        this.setState({
+            'loading': true,
+        });
+        axios({
+            'method': 'GET',
+            'url': '/authen/category'
+        }).then(val => {
+            this.setState({
+                'tableData': val.data.data,
+                'loading': false,
+            })
+        }).catch(err => {
+            this.setState({
+                'loading': false,
+            });
+        });
     }
 
     /*
@@ -38,6 +67,26 @@ class CategoryPage extends Component {
                 console.log(err);
             } else {
                 console.log(value);
+                this.setState({
+                    'confirming': true
+                });
+                axios({
+                    'method': 'POST',
+                    'url': '/authen/category',
+                    'data': value
+                }).then(response => {
+                    console.log(response);
+                    this.setState({
+                        'confirming': false,
+                        'addModalVisible': false
+                    });
+                    this.handleGetCategory();
+                }).catch(err => {
+                    console.log(err);
+                    this.setState({
+                        'confirming': false
+                    });
+                })
             }
         });
     }
@@ -51,11 +100,28 @@ class CategoryPage extends Component {
         });
     }
 
+    onSelectChange = (selected) => {
+        console.log(selected);
+        this.setState({
+            'selectedRowKeys': selected
+        });
+    }
+
     render() {
-        const {tableData, addModalVisible, loading} = this.state;
+        const {tableData, selectedRowKeys, addModalVisible, loading, confirming} = this.state;
+        const rowSelection = {
+            selectedRowKeys,
+            'onChange': this.onSelectChange
+        };
         return (
             <div className={'category-content'}>
                 <div className={'btn-area'}>
+                    <Button
+                        type={'primary'}
+                        onClick={this.handleGetCategory}
+                    >
+                        刷新
+                    </Button>
                     <Button
                         type={'primary'}
                         onClick={this.handleAddVisible}
@@ -67,11 +133,13 @@ class CategoryPage extends Component {
                     dataSource={tableData}
                     columns={columns}
                     loading={loading}
+                    rowSelection={rowSelection}
                 />
                 <AddCategoryModal
                     modalVisible={addModalVisible}
                     onCancel={this.handleAddVisible}
                     onConfirm={this.handleAddConfirm}
+                    confirmStatus={confirming}
                     wrappedComponentRef={(val) => {this.addCategoryRef = val;}}
                 />
             </div>

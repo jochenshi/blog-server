@@ -5,7 +5,7 @@ const modelInfo = require("../database/model/index");
 const {handleUserAdd} = require("../control/user");
 
 let router = new Router({
-    prefix: '/users'
+    prefix: '/authen/users'
 });
 
 

@@ -6,12 +6,15 @@ const Router = require('koa-router');
 const koaBody = require('koa-body');
 
 const app = new Koa();
-const router = new Router();
+const router = new Router({});
 
 const logTool = require('../src/common/log/logTool');
 
+const authRouter = require('./routes/validate');
 const paper = require('./routes/paper');
 const user = require('./routes/user');
+const category = require('./routes/category');
+const validate = require('./methods/validate');
 
 /*app.use(koaBody({
     multipart: true,
@@ -47,9 +50,14 @@ app.use(async (ctx, next) => {
         }
     });
 
+// 一些验证的模块
+// router.use(['/auth'], validate());
+app.use(authRouter.routes());
+
 //加载具体的各个模块的路由
 app.use(paper.routes());
 app.use(user.routes());
+app.use(category.routes());
 
 
 

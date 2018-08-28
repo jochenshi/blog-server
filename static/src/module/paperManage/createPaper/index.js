@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input} from 'antd';
+import {Modal, Form, Input, Select} from 'antd';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class CreateBlog extends Component{
     constructor(props){
@@ -9,7 +10,7 @@ class CreateBlog extends Component{
     }
 
     render(){
-        const {visible, onCreate, onCancel, form} = this.props;
+        const {visible, onCreate, onCancel, form, categoryList} = this.props;
         const {getFieldDecorator} = form;
         const formItemLayout = {
             'labelCol': {
@@ -37,6 +38,26 @@ class CreateBlog extends Component{
                             ]
                         })(
                             <Input/>
+                        )}
+                    </FormItem>
+                    <FormItem label={'分类'} {...formItemLayout}>
+                        {getFieldDecorator('category', {
+                            'rules': [
+                                {'required': true, 'message': '请选择博客的分类'}
+                            ]
+                        })(
+                            <Select>
+                                {(categoryList || []).map((val, index) => {
+                                    return (
+                                        <Option key={val._id}>{val.category}</Option>
+                                    )
+                                })}
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem label={'标签'} {...formItemLayout}>
+                        {getFieldDecorator('tags')(
+                            <Input />
                         )}
                     </FormItem>
                 </Form>

@@ -18,7 +18,10 @@ const config = merge(baseConfig, {
         port: 8080,
         host: '0.0.0.0',
         proxy: {
-            '/papers/*': {
+            '/authen/*': {
+                target: 'http://localhost:8089'
+            },
+            '/category/*': {
                 target: 'http://localhost:8089'
             }
         }

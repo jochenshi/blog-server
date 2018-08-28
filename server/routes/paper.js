@@ -8,7 +8,7 @@ let {transformFile} = require('../methods/tranformFile');
 let {handleUploadFile} = require('../methods/papers');
 
 let router = new Router({
-    prefix: '/papers'
+    prefix: '/authen/papers'
 });
 
 /*上传文件的入口*/
