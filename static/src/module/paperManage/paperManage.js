@@ -37,12 +37,34 @@ class PaperManage extends Component {
         ];
         this.state = {
             'addVisible': false,
-            'categoryList': []
+            'categoryList': [],
+            'paperData': [],
+            'paperTableLoading': true
         };
     }
 
     componentDidMount() {
+        this.getPaper();
         this.getCategory();
+    }
+
+    /*
+    *  获取文章的方法
+    * */
+    getPaper = () => {
+        this.setState({
+            'paperTableLoading': true
+        }, () => {
+            axios({
+                'url': '/authen/papers/',
+                'type': 'GET'
+            }).then(val => {
+                this.setState({
+                    'paperData': val.data.data || [],
+                    'paperTableLoading': false
+                });
+            });
+        });
     }
 
     /*
@@ -74,15 +96,14 @@ class PaperManage extends Component {
     handleAddConfirm = () => {
         const form = this.addForm.props.form;
         form.validateFields((err, values) => {
-            if(err) {
-                return;
+            if(!err) {
+                console.log('Received Values:', values);
             }
-            console.log('Received Values:', values);
         });
     }
 
     render() {
-        const {addVisible, categoryList} = this.state;
+        const {addVisible, categoryList, paperData, paperTableLoading} = this.state;
         return (
             <div className={'paper-manage'}>
                 <div className={"button-area"}>
@@ -93,9 +114,20 @@ class PaperManage extends Component {
                     }}>
                         新建文章
                     </Button>
+                    <Button
+                        type={'primary'}
+                        disabled={paperTableLoading}
+                        onClick={this.getPaper}
+                    >
+                        {paperTableLoading ? '获取中' : '刷新'}
+                    </Button>
                     {/*<Button type={"primary"}><Link to={"/auth/main/createPaper"}>写文章</Link></Button>*/}
                 </div>
-                <Table columns={this.columns}/>
+                <Table
+                    columns={this.columns}
+                    dataSource={paperData}
+                    loading={paperTableLoading}
+                />
                 <CreateBlog
                     visible={addVisible}
                     wrappedComponentRef={(formRef) => {

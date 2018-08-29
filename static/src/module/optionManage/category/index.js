@@ -119,8 +119,9 @@ class CategoryPage extends Component {
                     <Button
                         type={'primary'}
                         onClick={this.handleGetCategory}
+                        disabled={loading}
                     >
-                        刷新
+                        {loading ? '获取中' : '刷新'}
                     </Button>
                     <Button
                         type={'primary'}

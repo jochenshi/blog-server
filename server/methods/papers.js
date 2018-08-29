@@ -3,7 +3,7 @@ const fs = require('fs');
 const {uploadConfig} = require('../../config/config');
 const {uploadToCos} = require('./handle-cos');
 const {saveFileToLocal} = require('./common');
-const {blogs} = require('../database/model');
+const ModelInfo = require('../database/model');
 
 /*
 * 处理上传文件的操作*/
@@ -47,8 +47,42 @@ let handleSaveFile = async (ctx) => {
     }
 };
 
+/*
+*  处理管理平台的获取文章列表的请求
+* */
+const handleGetPaperList = async () => {
+    let res = {
+        'status': 200,
+        'result': true,
+        'data': [],
+        'message': ''
+    };
+    try{
+        const collect = await ModelInfo['blogs'].find({});
+        res = {
+            ...res,
+            'data': collect,
+            'status': 200
+        };
+    } catch (e) {
+        res = {
+            ...res,
+            'message': e,
+            'status': 404
+        };
+    }
+    return res;
+};
+
+/*
+*  处理管理平台的新建文章的请求
+* */
+const handlePaperCreate = async (data) => {
+
+};
+
 
 
 module.exports = {
-    handleUploadFile
+    handleUploadFile, handleGetPaperList
 };

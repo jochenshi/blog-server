@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Select} from 'antd';
+import {Modal, Form, Input, Select, Tooltip, Icon} from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -9,8 +9,14 @@ class CreateBlog extends Component{
         super(props);
     }
 
+    handleCancel = () => {
+        const {form, onCancel} = this.props;
+        form.resetFields();
+        onCancel();
+    };
+
     render(){
-        const {visible, onCreate, onCancel, form, categoryList} = this.props;
+        const {visible, onCreate, form, categoryList} = this.props;
         const {getFieldDecorator} = form;
         const formItemLayout = {
             'labelCol': {
@@ -26,7 +32,7 @@ class CreateBlog extends Component{
                 title={'新建博客'}
                 visible={visible}
                 onOk={onCreate}
-                onCancel={onCancel}
+                onCancel={this.handleCancel}
                 okText={'确定'}
                 cancelText={'取消'}
             >
@@ -46,16 +52,23 @@ class CreateBlog extends Component{
                                 {'required': true, 'message': '请选择博客的分类'}
                             ]
                         })(
-                            <Select>
+                            <Select mode={'multiple'}>
                                 {(categoryList || []).map((val, index) => {
                                     return (
-                                        <Option key={val._id}>{val.category}</Option>
+                                        <Option key={val.value}>{val.category}</Option>
                                     )
                                 })}
                             </Select>
                         )}
                     </FormItem>
-                    <FormItem label={'标签'} {...formItemLayout}>
+                    <FormItem label={(
+                        <span>
+                            标签&nbsp;
+                            <Tooltip title={'输入多个标签时请以英文格式的逗号作为分隔'}>
+                                <Icon type={'question-circle-o'} />
+                            </Tooltip>
+                        </span>
+                    )} {...formItemLayout}>
                         {getFieldDecorator('tags')(
                             <Input />
                         )}

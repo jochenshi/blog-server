@@ -5,7 +5,7 @@ const path = require("path");
 const koaBody = require('koa-body');
 
 let {transformFile} = require('../methods/tranformFile');
-let {handleUploadFile} = require('../methods/papers');
+let {handleUploadFile, handleGetPaperList} = require('../methods/papers');
 
 let router = new Router({
     prefix: '/authen/papers'
@@ -25,12 +25,15 @@ router.get("/getAuth", (ctx, next) => {
     getAuth()
 });
 
-//查询文章
+//管理平台查询文章列表的请求
 router.get('/', async (ctx, next) => {
     console.log(222);
-    let tt = await transformFile("./server/methods/test.md");
+    const result = await handleGetPaperList();
+    ctx.response.status = result.status;
+    ctx.response.body = result;
+    /*let tt = await transformFile("./server/methods/test.md");
     console.log('tt', tt);
-    ctx.response.body = 'asdasdasd'
+    ctx.response.body = 'asdasdasd'*/
 });
 
 
