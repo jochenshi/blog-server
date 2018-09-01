@@ -10,10 +10,10 @@ const columns = [
         'title': '类别',
         'dataIndex': 'category'
     },
-    {
+    /*{
         'title': '值',
         'dataIndex': 'value'
-    },
+    },*/
     {
         'title': '描述',
         'dataIndex': 'description'

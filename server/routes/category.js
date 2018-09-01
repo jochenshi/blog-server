@@ -11,8 +11,8 @@ let router = new Router({
 *  新建分类
 * */
 router.post('/', koaBody(), async (ctx, next) => {
-    const {category = '', value = '', description = ''} = ctx.request.body;
-    if(!category || !value){
+    const {category = '', description = ''} = ctx.request.body;
+    if(!category){
         console.log('param can not be null');
     } else {
         const res = await handleCategoryAdd(ctx.request.body);

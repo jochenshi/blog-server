@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 import {Table, Button} from 'antd';
+import moment from 'moment';
 import CreateBlog from './createPaper';
 import './paperManage.styl';
 
@@ -12,7 +13,10 @@ class PaperManage extends Component {
         this.columns = [
             {
                 title: "文章编号",
-                dataIndex: "serialNumber"
+                dataIndex: "serialNumber",
+                render(text, record){
+                    return record['_id']
+                }
             },
             {
                 title: "文章标题",
@@ -24,22 +28,47 @@ class PaperManage extends Component {
             },
             {
                 title: "标签",
-                dataIndex: "tags"
+                dataIndex: "tags",
+                render(text, record){
+                    return record['tag'].join()
+                }
             },
             {
                 title: "分类",
-                dataIndex: "classification"
+                dataIndex: "category",
+                render(text, record){
+                    return record['category'].join()
+                }
             },
             {
                 title: "创建日期",
-                dataIndex: "createTime"
+                dataIndex: "createTime",
+                render(text, record){
+                    const temp = moment(record['createdAt']).format('YYYY-MM-DD HH:mm:ss');
+                    console.log(temp);
+                    return temp;
+                }
+            },
+            {
+                title: "最近更新时间",
+                dataIndex: "updateTime",
+                render(text, record){
+                    const temp = moment(record['updatedAt']).format('YYYY-MM-DD HH:mm:ss');
+                    return temp;
+                }
+            },
+            {
+                title: '操作',
+                dataIndex: 'operation'
             }
         ];
         this.state = {
             'addVisible': false,
             'categoryList': [],
             'paperData': [],
-            'paperTableLoading': true
+            'paperTableLoading': true,
+            'paperCreating': false,
+            'selectedRowKeys': []
         };
     }
 
@@ -57,10 +86,15 @@ class PaperManage extends Component {
         }, () => {
             axios({
                 'url': '/authen/papers/',
-                'type': 'GET'
+                'method': 'GET'
             }).then(val => {
                 this.setState({
                     'paperData': val.data.data || [],
+                    'paperTableLoading': false
+                });
+            }).catch(err => {
+                this.setState({
+                    'paperData': [],
                     'paperTableLoading': false
                 });
             });
@@ -73,7 +107,7 @@ class PaperManage extends Component {
     getCategory() {
         axios({
             'url': '/authen/category',
-            'type': 'GET'
+            'method': 'GET'
         }).then(val => {
             this.setState({
                 'categoryList': val.data.data || []
@@ -97,13 +131,48 @@ class PaperManage extends Component {
         const form = this.addForm.props.form;
         form.validateFields((err, values) => {
             if(!err) {
+                this.setState({
+                    'paperCreating': true
+                });
                 console.log('Received Values:', values);
+                const {title, category, tags = ''} = values;
+                let finalTags = tags.length ? tags.split(',') : [];
+                axios({
+                    'url': '/authen/papers/',
+                    'method': 'POST',
+                    'data': {
+                        title,
+                        category,
+                        'tag': finalTags
+                    }
+                }).then(val => {
+                    this.setState({
+                        'addVisible': false,
+                        'paperCreating': false
+                    });
+                    form.resetFields();
+                    this.getPaper();
+                }).catch(err => {
+                    this.setState({
+                        'paperCreating': false
+                    });
+                });
             }
         });
     }
 
+    handleSelect = (selectedRowKeys, selectRows) => {
+        this.setState({
+            selectedRowKeys
+        });
+    }
+
     render() {
-        const {addVisible, categoryList, paperData, paperTableLoading} = this.state;
+        const {addVisible, categoryList, paperData, paperTableLoading, paperCreating, selectedRowKeys} = this.state;
+        const rowSelect = {
+            'selectedRowKeys': selectedRowKeys,
+            'onChange': this.handleSelect
+        };
         return (
             <div className={'paper-manage'}>
                 <div className={"button-area"}>
@@ -127,12 +196,15 @@ class PaperManage extends Component {
                     columns={this.columns}
                     dataSource={paperData}
                     loading={paperTableLoading}
+                    rowSelection={rowSelect}
+                    rowKey={record => record['_id']}
                 />
                 <CreateBlog
                     visible={addVisible}
                     wrappedComponentRef={(formRef) => {
                         this.addForm = formRef;
                     }}
+                    paperCreating={paperCreating}
                     categoryList={categoryList}
                     onCreate={this.handleAddConfirm}
                     onCancel={this.handleAddHide}

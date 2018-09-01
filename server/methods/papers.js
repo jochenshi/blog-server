@@ -58,7 +58,7 @@ const handleGetPaperList = async () => {
         'message': ''
     };
     try{
-        const collect = await ModelInfo['blogs'].find({});
+        const collect = await ModelInfo['blogs'].find({}).populate('category');
         res = {
             ...res,
             'data': collect,
@@ -78,11 +78,39 @@ const handleGetPaperList = async () => {
 *  处理管理平台的新建文章的请求
 * */
 const handlePaperCreate = async (data) => {
-
+    let res = {
+        'status': 200,
+        'result': true,
+        'data': [],
+        'message': ''
+    };
+    try{
+        const {title, category, tag, author='admin'} = data;
+        const papers = new ModelInfo['blogs']({
+            title, category, tag, author
+        });
+        await papers.save();
+        res =  {
+            ...res,
+            'status': 201,
+            'result': true,
+            'message': '操作成功',
+            'code': 200
+        };
+    }catch (e) {
+        res = {
+            ...res,
+            'status': 400,
+            'result': false,
+            'message': e,
+            'code': 10000
+        };
+    }
+    return res;
 };
 
 
 
 module.exports = {
-    handleUploadFile, handleGetPaperList
+    handleUploadFile, handleGetPaperList, handlePaperCreate
 };

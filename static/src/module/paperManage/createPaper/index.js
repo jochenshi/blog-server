@@ -16,7 +16,7 @@ class CreateBlog extends Component{
     };
 
     render(){
-        const {visible, onCreate, form, categoryList} = this.props;
+        const {visible, onCreate, form, categoryList, paperCreating} = this.props;
         const {getFieldDecorator} = form;
         const formItemLayout = {
             'labelCol': {
@@ -35,6 +35,7 @@ class CreateBlog extends Component{
                 onCancel={this.handleCancel}
                 okText={'确定'}
                 cancelText={'取消'}
+                confirmLoading={paperCreating}
             >
                 <Form>
                     <FormItem label={'标题'} {...formItemLayout}>
@@ -55,7 +56,7 @@ class CreateBlog extends Component{
                             <Select mode={'multiple'}>
                                 {(categoryList || []).map((val, index) => {
                                     return (
-                                        <Option key={val.value}>{val.category}</Option>
+                                        <Option key={val['_id']}>{val.category}</Option>
                                     )
                                 })}
                             </Select>

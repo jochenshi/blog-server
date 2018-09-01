@@ -17,9 +17,11 @@ const blogs = new Schema(
         tag: {
             type: Array
         },
-        category: {
-            type: Array
-        },
+        category: [{
+            type: Schema.Types.ObjectId,
+            ref: 'categories',
+            default: ''
+        }],
         extra: {
             type: String
         }

@@ -55,7 +55,7 @@ class AddCategoryModal extends Component{
                             <Input />
                         )}
                     </FormItem>
-                    <FormItem
+                    {/*<FormItem
                         label={'值'}
                         {...formItemLayout}
                     >
@@ -66,7 +66,7 @@ class AddCategoryModal extends Component{
                         })(
                             <Input />
                         )}
-                    </FormItem>
+                    </FormItem>*/}
                     <FormItem
                         label={'描述'}
                         {...formItemLayout}

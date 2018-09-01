@@ -8,11 +8,10 @@ const handleCategoryAdd = async (data) => {
         'message': ''
     };
     try {
-        const {category, value, description} = data;
+        const {category, description} = data;
         const collect = await ModelInfo['categories'].find({
             $or: [
-                {category},
-                {value}
+                {category}
             ]
         });
         if (collect.length){
@@ -25,7 +24,7 @@ const handleCategoryAdd = async (data) => {
             };
         }else {
             const categorys = new ModelInfo['categories']({
-                category, value, description
+                category, description
             });
             await categorys.save();
             res =  {

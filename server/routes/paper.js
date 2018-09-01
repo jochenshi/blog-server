@@ -5,7 +5,7 @@ const path = require("path");
 const koaBody = require('koa-body');
 
 let {transformFile} = require('../methods/tranformFile');
-let {handleUploadFile, handleGetPaperList} = require('../methods/papers');
+let {handleUploadFile, handleGetPaperList, handlePaperCreate} = require('../methods/papers');
 
 let router = new Router({
     prefix: '/authen/papers'
@@ -46,10 +46,12 @@ router.get('/:id', (ctx, next) => {
 
 
 //新增文章
-router.post('/', koaBody() ,(ctx, next) => {
+router.post('/', koaBody() ,async (ctx, next) => {
     const data = ctx.request.body;
     console.log(data);
-    ctx.response.body = data;
+    const result = await handlePaperCreate(data);
+    ctx.response.status = result.status;
+    ctx.response.body = result;
 });
 
 

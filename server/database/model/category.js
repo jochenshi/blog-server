@@ -7,10 +7,6 @@ const categories = new Schema(
             required: true,
             type: String
         },
-        value: {
-            required: true,
-            type: String
-        },
         description: {
             type: String,
             default: ''
