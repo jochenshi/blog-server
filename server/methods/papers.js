@@ -58,7 +58,10 @@ const handleGetPaperList = async () => {
         'message': ''
     };
     try{
-        const collect = await ModelInfo['blogs'].find({}).populate('category');
+        const collect = await ModelInfo['blogs'].find({}).populate({
+            'path': 'category',
+            'select': ['category']
+        });
         res = {
             ...res,
             'data': collect,
