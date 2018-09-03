@@ -112,8 +112,96 @@ const handlePaperCreate = async (data) => {
     return res;
 };
 
+/*
+*  处理管理平台的修改文章的基本信息的方法
+* */
+const handleModifyPaperInfo = async (data) => {
+    let res = {
+        'status': 200,
+        'result': true,
+        'data': [],
+        'message': ''
+    };
+    try {
+        const {category = [], id = '', tag = [], title = ''} = data || {};
+        if(!data || !category.length || !id || !title) {
+            res = {
+                ...res,
+                'status': 400,
+                'message': '参数不正确'
+            }
+        } else {
+            const collect = await ModelInfo['blogs'].findByIdAndUpdate(id, {
+                category,
+                title,
+                tag
+            });
+            res = {
+                ...res,
+                'data': collect
+            }
+        }
+    } catch (e) {
+        res = {
+            ...res,
+            'status': 400,
+            'result': false,
+            'message': e,
+            'code': 10000
+        };
+    }
+    return res;
+};
+
+/*
+*  处理管理平台获取指定文章的信息的请求
+* */
+const handleGetPaper = async (id) => {
+    let res = {
+        'status': 200,
+        'result': true,
+        'data': [],
+        'message': ''
+    };
+    try {
+        if(!id){
+            res = {
+                ...res,
+                'status': 400,
+                'message': '该文章不存在'
+            }
+        } else {
+            const collect = await ModelInfo['blogs'].find({
+                '_id': id.toString()
+            });
+            if(!collect.length){
+                res = {
+                    ...res,
+                    'status': 400,
+                    'message': '该文章不存在'
+                }
+            } else {
+                res = {
+                    ...res,
+                    'data': collect
+                }
+            }
+        }
+    } catch (e) {
+        res = {
+            ...res,
+            'status': 400,
+            'result': false,
+            'message': e,
+            'code': 10000
+        };
+    }
+    return res;
+};
+
 
 
 module.exports = {
-    handleUploadFile, handleGetPaperList, handlePaperCreate
+    handleUploadFile, handleGetPaperList, handlePaperCreate,
+    handleModifyPaperInfo, handleGetPaper
 };

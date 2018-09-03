@@ -48,7 +48,7 @@ class CategoryPage extends Component {
             'url': '/authen/category'
         }).then(val => {
             this.setState({
-                'tableData': val.data.data,
+                'tableData': val.data,
                 'loading': false,
             })
         }).catch(err => {

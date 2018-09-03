@@ -33,8 +33,9 @@ marked.setOptions({
 class Markdown extends Component{
     constructor(props) {
         super(props);
+        console.log('props', props);
         this.state = {
-            titleData: "",
+            titleData: '',
             rawData: '',
             htmlData: "",
             popVisible: false,
@@ -48,9 +49,13 @@ class Markdown extends Component{
         ];
     }
 
+
     //处理标题输入框的事件
     handleInput = (e) => {
         e.persist();
+        this.setState({
+            'rawTitle': e.target.value
+        });
         this.inputFlag && clearTimeout(this.inputFlag);
         this.inputFlag = setTimeout(() => {
             this.setState({
@@ -192,7 +197,13 @@ class Markdown extends Component{
                     }
                 </Modal>
                 <div className={"markdown-area"}>
-                    <input className={"markdown-title"} onChange={this.handleInput} placeholder={"请输入标题"}/>
+                    <input
+                        className={"markdown-title"}
+                        onChange={this.handleInput}
+                        value={this.state.rawTitle}
+                        defaultValue={this.props.title}
+                        placeholder={"请输入标题"}
+                    />
                     <ul className={"markdown-operation"}>
                         {
                             this.icons.length ?

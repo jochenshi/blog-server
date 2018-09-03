@@ -2,9 +2,10 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-import {Table, Button} from 'antd';
+import {Table, Button, Tag, Icon, Tooltip, Divider} from 'antd';
 import moment from 'moment';
 import CreateBlog from './createPaper';
+import EditBlogInfo from './editPaper';
 import './paperManage.styl';
 
 class PaperManage extends Component {
@@ -28,16 +29,20 @@ class PaperManage extends Component {
             },
             {
                 title: "标签",
-                dataIndex: "tags",
+                dataIndex: "tag",
                 render(text, record){
-                    return record['tag'].join()
+                    return text.length ?
+                        text.map(val => <Tag color={'blue'} key={val}>{val}</Tag>) :
+                        '--';
                 }
             },
             {
                 title: "分类",
                 dataIndex: "category",
                 render(text, record){
-                    return record['category'].join()
+                    console.log(text);
+                    const arr = record['category'].map(val => val.category);
+                    return arr.join();
                 }
             },
             {
@@ -59,15 +64,47 @@ class PaperManage extends Component {
             },
             {
                 title: '操作',
-                dataIndex: 'operation'
+                dataIndex: 'operation',
+                render: (text, record) => (
+                    <span>
+                        <a
+                            href="javascript:;"
+                            onClick={() => {
+                                this.props.history.push('/auth/main/createPaper/' + record['_id']);
+                            }}
+                        >
+                            <Tooltip title={'编辑文章内容'}>
+                                <Icon type={'edit'} />
+                            </Tooltip>
+                        </a>
+                        <Divider type={'vertical'} />
+                        <a
+                            href="javascript:;"
+                            onClick={() => {
+                                console.log(record);
+                                this.setState({
+                                    'editVisible': true,
+                                    'editRecord': record
+                                });
+                            }}
+                        >
+                            <Tooltip title={'编辑文章信息'}>
+                                <Icon type={'profile'} />
+                            </Tooltip>
+                        </a>
+                    </span>
+                )
             }
         ];
         this.state = {
             'addVisible': false,
+            'editVisible': false,
             'categoryList': [],
             'paperData': [],
             'paperTableLoading': true,
             'paperCreating': false,
+            'paperEdit': false,
+            'editRecord': {},
             'selectedRowKeys': []
         };
     }
@@ -89,7 +126,7 @@ class PaperManage extends Component {
                 'method': 'GET'
             }).then(val => {
                 this.setState({
-                    'paperData': val.data.data || [],
+                    'paperData': val.data || [],
                     'paperTableLoading': false
                 });
             }).catch(err => {
@@ -110,7 +147,7 @@ class PaperManage extends Component {
             'method': 'GET'
         }).then(val => {
             this.setState({
-                'categoryList': val.data.data || []
+                'categoryList': val.data || []
             });
         });
     }
@@ -161,6 +198,55 @@ class PaperManage extends Component {
         });
     }
 
+    /*
+    *  处理编辑博客信息的弹出框的隐藏
+    * */
+    handleEditHide = () => {
+        this.setState({
+            'editVisible': false,
+            'editRecord': {}
+        });
+    }
+
+    /*
+    *  处理编辑博客信息的确认的操作
+    * */
+    handleEditConfirm = () => {
+        const form = this.editForm.props.form;
+        console.log(form);
+        form.validateFields((err, values) => {
+            if(!err){
+                this.setState({
+                    'paperEdit': true
+                });
+                const {title, category, tags = ''} = values;
+                const id = this.editForm.props.editInfo._id;
+                let finalTags = tags.length ? tags.split(',') : [];
+                axios({
+                    'url': '/authen/papers/',
+                    'method': 'PUT',
+                    'data': {
+                        id,
+                        title,
+                        category,
+                        'tag': finalTags
+                    }
+                }).then(val => {
+                    this.setState({
+                        'editVisible': false,
+                        'paperEdit': false
+                    });
+                    form.resetFields();
+                    this.getPaper();
+                }).catch(err => {
+                    this.setState({
+                        'paperEdit': false
+                    });
+                });
+            }
+        })
+    }
+
     handleSelect = (selectedRowKeys, selectRows) => {
         this.setState({
             selectedRowKeys
@@ -168,7 +254,10 @@ class PaperManage extends Component {
     }
 
     render() {
-        const {addVisible, categoryList, paperData, paperTableLoading, paperCreating, selectedRowKeys} = this.state;
+        const {
+            addVisible, categoryList, paperData,
+            paperTableLoading, paperCreating, selectedRowKeys,
+            editVisible, paperEdit, editRecord} = this.state;
         const rowSelect = {
             'selectedRowKeys': selectedRowKeys,
             'onChange': this.handleSelect
@@ -208,6 +297,17 @@ class PaperManage extends Component {
                     categoryList={categoryList}
                     onCreate={this.handleAddConfirm}
                     onCancel={this.handleAddHide}
+                />
+                <EditBlogInfo
+                    visible={editVisible}
+                    wrappedComponentRef={(formRef) => {
+                        this.editForm = formRef;
+                    }}
+                    paperEdit={paperEdit}
+                    categoryList={categoryList}
+                    editInfo={editRecord}
+                    onConfirm={this.handleEditConfirm}
+                    onCancel={this.handleEditHide}
                 />
             </div>
         )

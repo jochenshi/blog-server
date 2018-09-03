@@ -23,8 +23,15 @@ class CreatePaper extends Component{
         super(props);
         this.clickFlag = false;
         this.state = {
-            htmlData: ""
+            htmlData: '',
+            title: ''
         }
+    }
+
+    componentDidMount(){
+        const {id} = this.props.match.params;
+        console.log(id);
+        this.handleGetPaper(id);
     }
 
     handleInput = (e) => {
@@ -37,6 +44,21 @@ class CreatePaper extends Component{
             })
         }, 2000)
 
+    };
+
+    /*
+    *  获取文章内容的方法
+    * */
+    handleGetPaper = (id) => {
+        axios({
+            'url': `/authen/papers/${id}`,
+            'method': 'GET'
+        }).then(val => {
+            console.log('val', val);
+            this.setState({
+                'title': val.data[0].title
+            });
+        })
     };
 
     //将文章的内容保存到数据库的方法
@@ -53,9 +75,13 @@ class CreatePaper extends Component{
     };
 
     render() {
+        console.log('title', this.state.title);
         return (
             <div className={"create-paper-area"}>
-                <Markdown handleSave={this.handleSave}/>
+                <Markdown
+                    handleSave={this.handleSave}
+                    title={this.state.title}
+                />
                 {/*<div className={"markdown-area"}>
                     <textarea onChange={this.handleInput}></textarea>
                 </div>
