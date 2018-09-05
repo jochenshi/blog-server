@@ -40,7 +40,6 @@ class PaperManage extends Component {
                 title: "分类",
                 dataIndex: "category",
                 render(text, record){
-                    console.log(text);
                     const arr = record['category'].map(val => val.category);
                     return arr.join();
                 }
@@ -50,7 +49,6 @@ class PaperManage extends Component {
                 dataIndex: "createTime",
                 render(text, record){
                     const temp = moment(record['createdAt']).format('YYYY-MM-DD HH:mm:ss');
-                    console.log(temp);
                     return temp;
                 }
             },
@@ -70,18 +68,6 @@ class PaperManage extends Component {
                         <a
                             href="javascript:;"
                             onClick={() => {
-                                this.props.history.push('/auth/main/createPaper/' + record['_id']);
-                            }}
-                        >
-                            <Tooltip title={'编辑文章内容'}>
-                                <Icon type={'edit'} />
-                            </Tooltip>
-                        </a>
-                        <Divider type={'vertical'} />
-                        <a
-                            href="javascript:;"
-                            onClick={() => {
-                                console.log(record);
                                 this.setState({
                                     'editVisible': true,
                                     'editRecord': record
@@ -90,6 +76,17 @@ class PaperManage extends Component {
                         >
                             <Tooltip title={'编辑文章信息'}>
                                 <Icon type={'profile'} />
+                            </Tooltip>
+                        </a>
+                        <Divider type={'vertical'} />
+                        <a
+                            href="javascript:;"
+                            onClick={() => {
+                                this.props.history.push('/auth/main/createPaper/' + record['_id']);
+                            }}
+                        >
+                            <Tooltip title={'编辑文章内容'}>
+                                <Icon type={'edit'} />
                             </Tooltip>
                         </a>
                     </span>
@@ -223,7 +220,7 @@ class PaperManage extends Component {
                 const id = this.editForm.props.editInfo._id;
                 let finalTags = tags.length ? tags.split(',') : [];
                 axios({
-                    'url': '/authen/papers/',
+                    'url': '/authen/papers/info/',
                     'method': 'PUT',
                     'data': {
                         id,

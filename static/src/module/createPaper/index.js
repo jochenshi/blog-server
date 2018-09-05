@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import marked from 'marked';
 import axios from 'axios';
+import {message} from 'antd';
 
-import './index.styl'
+import './index.styl';
 
-import Markdown from '../../component/markdown/markdown'
+import Markdown from '../../component/markdown/markdown';
 
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -14,7 +15,8 @@ marked.setOptions({
     pedantic: false,
     sanitize: false,
     smartLists: true,
-    smartypants: false
+    smartypants: false,
+    paperId: ''
 });
 
 
@@ -24,7 +26,8 @@ class CreatePaper extends Component{
         this.clickFlag = false;
         this.state = {
             htmlData: '',
-            title: ''
+            paperInfo: '',
+            spinLoading: true
         }
     }
 
@@ -56,37 +59,59 @@ class CreatePaper extends Component{
         }).then(val => {
             console.log('val', val);
             this.setState({
-                'title': val.data[0].title
+                'paperInfo': {
+                    'title': val.data[0].title,
+                    'content': val.data[0].content
+                },
+                'spinLoading': false,
+                'paperId': val.data[0]._id
             });
         })
     };
 
     //将文章的内容保存到数据库的方法
-    handleSave = (title, content) => {
+    handleSave = (title = '', content = '') => {
         console.log({
             title,
             content
         });
+        const id = this.state.paperId;
+        let flag = true;
+        if(!id) {
+            message.info('参数不正确，请刷新页面或者获取正确的id');
+            flag = false;
+        } else if(!title){
+            message.info('文章标题不能为空');
+            flag = false;
+        }
+        if(!flag) {
+            return;
+        }
         let saveData = {
             title: title,
-            content: content
+            content: content,
+            id: id
         };
-        axios.post('/papers', saveData);
+        axios({
+            'url': `/authen/papers/${id}`,
+            'method': 'PUT',
+            'data': saveData
+        });
     };
 
     render() {
+        const {paperInfo, spinLoading} = this.state;
         console.log('title', this.state.title);
+        console.log(spinLoading);
         return (
             <div className={"create-paper-area"}>
                 <Markdown
                     handleSave={this.handleSave}
-                    title={this.state.title}
+                    paperInfo={paperInfo}
                 />
-                {/*<div className={"markdown-area"}>
-                    <textarea onChange={this.handleInput}></textarea>
+                <div className={'loading'} style={{'display': spinLoading ? '' : 'none'}}>
+                    <span className={'text'}>加载中...</span>
                 </div>
-                <div className={"display-area"} dangerouslySetInnerHTML={{__html: this.state.htmlData}}>
-                </div>*/}
             </div>
         )
     }

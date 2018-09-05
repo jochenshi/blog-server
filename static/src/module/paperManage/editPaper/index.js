@@ -84,7 +84,6 @@ class EditBlog extends Component{
 export default Form.create({
     mapPropsToFields(props){
         const {category = [], tag = [], title} = props.editInfo || {};
-        console.log('ca', category);
         return {
             'title': Form.createFormField({
                 'value': title || ''

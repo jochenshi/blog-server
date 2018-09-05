@@ -35,18 +35,34 @@ class Markdown extends Component{
         super(props);
         console.log('props', props);
         this.state = {
-            titleData: '',
+            rawTitle: '',
             rawData: '',
+            titleData: '',
             htmlData: "",
             popVisible: false,
             uploadVisible: true,
-            urlData: ""
+            urlData: "",
+            prevTitle: ''
         };
         this.icons = [
             {class: "icon-picture", title: "插入图片", key: "picture", click: this.handleUploadVisible},
             {class: "icon-save", title: "保存", key: "save", click: this.handleSave},
             {class: "icon-paper", title: "发布文章", key: "release-paper", click: this.releasePaper}
         ];
+    }
+
+    static getDerivedStateFromProps(props, state){
+        const {title = '', content} = props.paperInfo || {};
+        if(title !== state.prevTitle) {
+            return {
+                'rawTitle': title,
+                'rawData': content,
+                'titleData': title,
+                'htmlData': content ? marked(content) : '',
+                'prevTitle': props.title
+            }
+        }
+        return null;
     }
 
 
@@ -172,6 +188,7 @@ class Markdown extends Component{
     };
 
     render() {
+        console.log('raw', this.state.rawTitle);
         return (
             <div className={"markdown-wrapper"}>
                 <Modal title={"上传图片"}
@@ -201,7 +218,6 @@ class Markdown extends Component{
                         className={"markdown-title"}
                         onChange={this.handleInput}
                         value={this.state.rawTitle}
-                        defaultValue={this.props.title}
                         placeholder={"请输入标题"}
                     />
                     <ul className={"markdown-operation"}>

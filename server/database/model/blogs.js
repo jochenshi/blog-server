@@ -22,6 +22,10 @@ const blogs = new Schema(
             ref: 'categories',
             default: ''
         }],
+        valid: {
+            type: Boolean,
+            default: true
+        },
         extra: {
             type: String
         }

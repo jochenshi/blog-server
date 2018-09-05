@@ -154,6 +154,52 @@ const handleModifyPaperInfo = async (data) => {
 };
 
 /*
+* 处理管理平台修改指定文章的内容的方法
+* */
+const handleModifyPaperContent = async (data, paperId = '') => {
+    let res = {
+        'status': 200,
+        'result': true,
+        'data': [],
+        'message': ''
+    };
+    try{
+        const {id, title, content} = data || {};
+        if(!id || !paperId || id !== paperId){
+            res = {
+                ...res,
+                'message': '文章ID不存在，或者不正确',
+                'status': 400
+            }
+        } else if (!title) {
+            res = {
+                ...res,
+                'message': '文章标题不能为空',
+                'status': 400
+            }
+        } else {
+            const collect = await ModelInfo['blogs'].findByIdAndUpdate(id, {
+                content,
+                title
+            });
+            res = {
+                ...res,
+                'data': collect
+            }
+        }
+    } catch (e) {
+        res = {
+            ...res,
+            'status': 400,
+            'result': false,
+            'message': e,
+            'code': 10000
+        };
+    }
+    return res;
+};
+
+/*
 *  处理管理平台获取指定文章的信息的请求
 * */
 const handleGetPaper = async (id) => {
@@ -203,5 +249,5 @@ const handleGetPaper = async (id) => {
 
 module.exports = {
     handleUploadFile, handleGetPaperList, handlePaperCreate,
-    handleModifyPaperInfo, handleGetPaper
+    handleModifyPaperInfo, handleGetPaper, handleModifyPaperContent
 };

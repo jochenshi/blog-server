@@ -7,7 +7,7 @@ const koaBody = require('koa-body');
 let {transformFile} = require('../methods/tranformFile');
 let {
     handleUploadFile, handleGetPaperList, handlePaperCreate,
-    handleModifyPaperInfo, handleGetPaper
+    handleModifyPaperInfo, handleGetPaper, handleModifyPaperContent
 } = require('../methods/papers');
 
 let router = new Router({
@@ -60,12 +60,24 @@ router.post('/', koaBody() ,async (ctx, next) => {
     ctx.response.body = result;
 });
 
+
 /*
 *  处理修改文章的基本信息的请求
 * */
-router.put('/', koaBody(), async (ctx, next) => {
+router.put('/info', koaBody(), async (ctx, next) => {
     const data = ctx.request.body;
     const result = await handleModifyPaperInfo(data);
+    ctx.response.status = result.status;
+    ctx.response.body = result;
+});
+
+/*
+*  处理修改文章的主题内同的请求
+* */
+router.put('/:id', koaBody(), async (ctx, next) => {
+    const data = ctx.request.body;
+    const {id} = ctx.params;
+    const result = await handleModifyPaperContent(data, id);
     ctx.response.status = result.status;
     ctx.response.body = result;
 });
