@@ -22,6 +22,13 @@ const blogs = new Schema(
             ref: 'categories',
             default: ''
         }],
+        released: {
+            type: Boolean,
+            default: false
+        },
+        releaseTime: {
+            type: Date
+        },
         valid: {
             type: Boolean,
             default: true

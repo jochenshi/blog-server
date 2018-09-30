@@ -16,6 +16,8 @@ const user = require('./routes/user');
 const category = require('./routes/category');
 const validate = require('./methods/validate');
 
+const frontPaper = require('./routes/front/papers');
+
 /*app.use(koaBody({
     multipart: true,
     formidable: {
@@ -58,6 +60,7 @@ app.use(authRouter.routes());
 app.use(paper.routes());
 app.use(user.routes());
 app.use(category.routes());
+app.use(frontPaper.routes());
 
 
 

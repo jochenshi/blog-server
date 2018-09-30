@@ -22,7 +22,7 @@ const initAxios = () => {
         }
         return Promise.reject(error.response.data);
     })
-}
+};
 
 
 class App extends Component{

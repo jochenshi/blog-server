@@ -178,9 +178,12 @@ const handleModifyPaperContent = async (data, paperId = '') => {
                 'status': 400
             }
         } else {
-            const collect = await ModelInfo['blogs'].findByIdAndUpdate(id, {
+            await ModelInfo['blogs'].findByIdAndUpdate(id.toString(), {
                 content,
                 title
+            });
+            const collect = await ModelInfo['blogs'].find({
+                '_id': id.toString()
             });
             res = {
                 ...res,
@@ -246,8 +249,86 @@ const handleGetPaper = async (id) => {
 };
 
 
+// 以下为博客界面的请求
+/*
+*  获取文章列表
+* */
+const handleGetFrontPaperList = async () => {
+    let res = {
+        'status': 200,
+        'result': true,
+        'data': [],
+        'message': ''
+    };
+    try{
+        const collect = await ModelInfo['blogs'].find({}).populate({
+            'path': 'category',
+            'select': ['category']
+        });
+        res = {
+            ...res,
+            'data': collect,
+            'status': 200
+        };
+    } catch (e) {
+        res = {
+            ...res,
+            'message': e,
+            'status': 404
+        };
+    }
+    return res;
+};
+
+/*
+*  获取指定博客的详细内容
+* */
+const handleGetFrontPaper = async (id) => {
+    let res = {
+        'status': 200,
+        'result': true,
+        'data': [],
+        'message': ''
+    };
+    try {
+        if(!id){
+            res = {
+                ...res,
+                'status': 400,
+                'message': '该文章不存在'
+            }
+        } else {
+            const collect = await ModelInfo['blogs'].find({
+                '_id': id.toString()
+            });
+            if(!collect.length){
+                res = {
+                    ...res,
+                    'status': 400,
+                    'message': '该文章不存在'
+                }
+            } else {
+                res = {
+                    ...res,
+                    'data': collect
+                }
+            }
+        }
+    } catch (e) {
+        res = {
+            ...res,
+            'status': 400,
+            'result': false,
+            'message': e,
+            'code': 10000
+        };
+    }
+    return res;
+};
+
 
 module.exports = {
     handleUploadFile, handleGetPaperList, handlePaperCreate,
-    handleModifyPaperInfo, handleGetPaper, handleModifyPaperContent
+    handleModifyPaperInfo, handleGetPaper, handleModifyPaperContent,
+    handleGetFrontPaperList, handleGetFrontPaper
 };

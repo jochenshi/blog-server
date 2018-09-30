@@ -35,10 +35,10 @@ class Markdown extends Component{
         super(props);
         console.log('props', props);
         this.state = {
-            rawTitle: '',
-            rawData: '',
-            titleData: '',
-            htmlData: "",
+            rawTitle: '', // 左侧的标题，输入的标题
+            rawData: '',  // 左侧的正文，输入的正文
+            titleData: '', // 右侧的标题
+            htmlData: "", // 右侧的正文，markdown转换后的正文
             popVisible: false,
             uploadVisible: true,
             urlData: "",
@@ -97,7 +97,7 @@ class Markdown extends Component{
 
     //处理点击保存按钮以及触发保存操作时的事件
     handleSave() {
-        this.handleClick("handleSave", this, this.state.titleData, this.state.rawData);
+        this.handleClick("handleSave", this, this.state.rawTitle, this.state.rawData);
     }
 
     //处理添加图片的事件
